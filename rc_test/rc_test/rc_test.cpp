@@ -170,6 +170,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         PostQuitMessage(0);
         break;
     default:
+        //对用户不处理的消息调用默认的窗口处理程序处理
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
