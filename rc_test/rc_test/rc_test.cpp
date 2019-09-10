@@ -11,16 +11,16 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
-// Forward declarations of functions included in this code module:
+                                                // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
-                     _In_opt_ HINSTANCE hPrevInstance,
-                     _In_ LPWSTR    lpCmdLine,
-                     _In_ int       nCmdShow)
+    _In_opt_ HINSTANCE hPrevInstance,
+    _In_ LPWSTR    lpCmdLine,
+    _In_ int       nCmdShow)
 {
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
@@ -33,7 +33,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     MyRegisterClass(hInstance);
 
     // Perform application initialization:
-    if (!InitInstance (hInstance, nCmdShow))
+    if (!InitInstance(hInstance, nCmdShow))
     {
         return FALSE;
     }
@@ -52,7 +52,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
     }
 
-    return (int) msg.wParam;
+    return (int)msg.wParam;
 }
 
 
@@ -68,26 +68,26 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 
     wcex.cbSize = sizeof(WNDCLASSEX);
 
-    wcex.style          = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc    = WndProc;  //指定该窗口的消息事件处理函数
-    wcex.cbClsExtra     = 0;
-    wcex.cbWndExtra     = 0;
-    wcex.hInstance      = hInstance;
-    HICON htestIcon =        LoadIcon(hInstance, MAKEINTRESOURCE(IDI_RC_TEST));
+    wcex.style = CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc = WndProc;  //指定该窗口的消息事件处理函数
+    wcex.cbClsExtra = 0;
+    wcex.cbWndExtra = 0;
+    wcex.hInstance = hInstance;
+    HICON htestIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_RC_TEST));
     if (htestIcon == NULL)
     {
         MessageBox(NULL, _T("加载图标失败"), _T("错误"), MB_ICONERROR);
         return ATOM();
     }
 
-    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_RC_TEST));    //任务栏图标
-    wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);                        //鼠标光标（箭头，等待）
-    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW +1);                            //窗口背景颜色
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_RC_TEST);
-    wcex.lpszClassName  = szWindowClass;
-    wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL)); //标题栏小图标
+    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_RC_TEST));    //任务栏图标
+    wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);                        //鼠标光标（箭头，等待）
+    wcex.hbrBackground = (HBRUSH)(COLOR_GRAYTEXT + 1);                            //窗口背景颜色
+    wcex.lpszMenuName = MAKEINTRESOURCEW(IDC_RC_TEST);
+    wcex.lpszClassName = szWindowClass;
+    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL)); //标题栏小图标
 
-    //注册窗口类
+                                                                         //注册窗口类
     return RegisterClassExW(&wcex);
 }
 
@@ -103,25 +103,25 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   hInst = hInstance; // Store instance handle in our global variable
+    hInst = hInstance; // Store instance handle in our global variable
 
-   //HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-   //   CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
-   //创建窗口
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-       100, 100, 500, 500, nullptr, nullptr, hInstance, nullptr);
+                       //HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+                       //   CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+                       //创建窗口
+    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+        100, 100, 500, 500, nullptr, nullptr, hInstance, nullptr);
 
-   if (!hWnd)
-   {
-      return FALSE;
-   }
+    if (!hWnd)
+    {
+        return FALSE;
+    }
 
-   //显示窗口，nCmdShow控制窗口如何显示：SW_SHOWMAXIMIZED表示最大化显示
-   ShowWindow(hWnd, nCmdShow);
-   //直接发送WM_PAINT消息到指定窗口的窗口处理程序，不经过应用队列
-   UpdateWindow(hWnd);
+    //显示窗口，nCmdShow控制窗口如何显示：SW_SHOWMAXIMIZED表示最大化显示
+    ShowWindow(hWnd, nCmdShow);
+    //直接发送WM_PAINT消息到指定窗口的窗口处理程序，不经过应用队列
+    UpdateWindow(hWnd);
 
-   return TRUE;
+    return TRUE;
 }
 
 //
@@ -139,33 +139,41 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_COMMAND:
+    {
+        int wmId = LOWORD(wParam);
+        // Parse the menu selections:
+        switch (wmId)
         {
-            int wmId = LOWORD(wParam);
-            // Parse the menu selections:
-            switch (wmId)
-            {
-            case IDM_ABOUT:
-                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-                break;
-            case IDM_EXIT:
-                DestroyWindow(hWnd);
-                break;
-            case IDS_STRING1001:
-                MessageBox(NULL, _T("HELLO"), _T("WORLD"), MB_ICONHAND);
-                break;
-            default:
-                return DefWindowProc(hWnd, message, wParam, lParam);
-            }
+        case IDM_ABOUT:
+            DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+            break;
+        case IDM_EXIT:
+            DestroyWindow(hWnd);
+            break;
+        case IDS_STRING1001:
+            MessageBox(NULL, _T("HELLO"), _T("WORLD"), MB_ICONHAND);
+            break;
+        default:
+            return DefWindowProc(hWnd, message, wParam, lParam);
         }
-        break;
+    }
+    break;
     case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Add any drawing code that uses hdc here...
-            EndPaint(hWnd, &ps);
-        }
-        break;
+    {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
+        // TODO: Add any drawing code that uses hdc here...
+        RECT rect;
+        rect.left = 0;
+        rect.top = 0;
+        rect.right = 200;
+        rect.bottom = 200;
+        const wchar_t* text = _T("Hello, Windows 98!");
+        DrawText(hdc, text, wcslen(text), &rect,
+            DT_SINGLELINE | DT_CENTER | DT_VCENTER);
+        EndPaint(hWnd, &ps);
+    }
+    break;
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
